@@ -13,7 +13,7 @@ Create a folder on your local/docker server (i.e. /some/local/folder) containing
 Format for /some/local/folder/config 
 ```
 Host public.server.tld
-    User youruser
+    User sshusername
     HostName public.server.tld
     IdentityFile /root/.ssh/private_key  # (leave /root/.ssh/ as is)
     StrictHostKeyChecking no
@@ -24,7 +24,7 @@ Launch the container:
 docker run -d -p 3306:3306 \
 	-e PORT_EXPOSED=3306 \
 	-e PORT_TO=3306 \
-	-e ADDR_TO=private.server.tld \
+	-e ADDR_TO=private.mysql.server.tld \
 	-e ADDR_TUNNEL=public.server.tld \
 	-v /some/local/folder:/root/.ssh \
 	--name ssh.tunnel \
@@ -33,12 +33,12 @@ docker run -d -p 3306:3306 \
 Now you can access the private service on the chosen port of your local/docker server
 
 ```
-mysql -u someuser -p -h local.server.tld -P 3306
+mysql -u mysqlusername -p -h local.server.tld -P 3306
 ```
 
-## Tip
-Connect and alias your tunnel along other containers in the same network. 
+### Tip
+Connect and alias your tunnel along with other containers in the same network. 
 ```
-docker network connect --alias any.endpoint somenetwork ssh.tunnel
+docker network connect --alias some.endpoint somenetwork ssh.tunnel
 ```
-Now your containers can reach the remote/restricted service at any.endpoint
+Now your other containers can reach the remote/restricted service at some.endpoint
